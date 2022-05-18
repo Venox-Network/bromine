@@ -1,0 +1,7 @@
+name: ban-ip-Disabler
+author: srnyx
+description: Disables the ban-ip command
+
+main: network.venox.ban_ip_disabler.Main
+version: ${version}
+api-version: 1.18
