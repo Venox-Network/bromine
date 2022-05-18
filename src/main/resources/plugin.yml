@@ -4,4 +4,14 @@ description: Disables the ban-ip command
 
 main: network.venox.ban_ip_disabler.Main
 version: ${version}
-api-version: 1.18
+api-version: 1.13
+
+commands:
+  bipreload:
+    description: "Reloads the plugin files"
+    usage: "Usage: /<command>"
+    permission: ban-ip.reload
+
+permissions:
+  ban-ip.reload:
+    description: "Gives access to /bipreload"

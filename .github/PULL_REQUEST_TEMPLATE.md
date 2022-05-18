@@ -12,7 +12,7 @@
 <!--- see how your change affects other areas of the code, etc. -->
 
 ## Media:
-<!--- Screenshots/videos, only if applicable/appropraite. -->
+<!--- Screenshots/videos, only if applicable/appropriate. -->
 
 ## Types of changes
 <!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
