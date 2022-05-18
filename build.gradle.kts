@@ -1,5 +1,5 @@
 description = "ban-ip-disabler"
-version = "0.0.1"
+version = "1.0.0"
 group = "network.venox"
 
 repositories {
