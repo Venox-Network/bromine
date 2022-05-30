@@ -35,11 +35,11 @@ public class ChatListener implements Listener {
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
         final Player player = event.getPlayer();
-        final List<String> list = Main.config.getStringList("ban-ip.allowed-players");
+        final List<String> list = Main.config.getStringList("ban-ip_allowed-players");
 
         if (event.getMessage().startsWith("/ban-ip ") && (list.isEmpty() || !list.contains(player.getName()))) {
             event.setCancelled(true);
-            new MessageManager("ban-ip").send(player);
+            new MessageManager("ban-ip.denied").send(player);
         }
     }
 }

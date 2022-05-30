@@ -1,18 +1,40 @@
-# Sent when they reload the plugin with sufficient permissions
-reload: "&2&lSUCCESS! &aPlugin files reloaded"
+# Messages not belonging to any module
+plugin:
+  # %prefix%
+  prefix: "&8[&c&lBr&8] "
+
+  # Sent when a player reloads the plugin
+  reload: "%prefix%&2&lSUCCESS! &aPlugin files reloaded"
+
+  # Sent when an invalid player is specified
+  # %player% = the player specified
+  invalid-player: "%prefix%&4&lERROR! &4%player% &cis not a valid player"
+
+  # Sent when a player is denied permission
+  no-permission: "%prefix%&4&lERROR! &cYou must have &4%permission% &cto use this command"
 
 
-# Sent when they run /ban-ip and are denied access
-ban-ip: "&4&lERROR! &cYou can't use this command"
+# Everything related to the /ban-ip module
+ban-ip:
+  # Sent when a player tries to run /ban-ip
+  denied: "&4&lERROR! &cYou can't use this command"
 
 
-# Everything related to /reset
+# Everything related to the /reset module
 reset:
   # Sent when the world(s) are successfully reset
-  message: "&2&lSUCCESS! &aThe world(s) has been reset"
+  # %world% = the world that was reset
+  success: "&2&lSUCCESS! &2%world% &ahas been reset"
 
   # The kick reason for the players online
   kick: "&cResetting the world(s)"
 
   # Message sent when the world specified doesn't exist
-  error: "&4&lERROR! &cThe world you specified doesn't exist"
+  # %world% = the world specified
+  error: "%prefix%&4&lERROR! &cWorld &4%world% &cdoesn't exist"
+
+
+# Everything related to the /chattitle module
+chat-title:
+  # Sent when a player toggles Chat-Title
+  toggle: "%prefix%&2&lSUCCESS! &aChat-Title has been &2%status%"

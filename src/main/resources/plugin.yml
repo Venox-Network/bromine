@@ -1,6 +1,6 @@
 name: Bromine
 author: srnyx
-description: General essential stuff for Venox Network
+description: General essentials for Venox Network
 
 main: network.venox.bromine.Main
 version: ${version}

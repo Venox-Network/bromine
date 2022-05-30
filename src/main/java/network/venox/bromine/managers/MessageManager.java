@@ -15,22 +15,20 @@ public class MessageManager {
      * @param   key The location of the message in the messages file
      */
     public MessageManager(String key) {
-        final String messageRaw = Main.messages.getString(key);
+        final String messageKey = Main.messages.getString(key);
         final String prefix = Main.messages.getString("plugin.prefix");
 
-        if (messageRaw == null) {
+        if (messageKey == null) {
             this.message = key;
             return;
         }
 
-        final String messageColor = ChatColor.translateAlternateColorCodes('&', messageRaw);
-
         if (prefix == null) {
-            this.message = messageColor;
+            this.message = ChatColor.translateAlternateColorCodes('&', messageKey);
             return;
         }
 
-        this.message = messageColor.replace("%prefix%", prefix);
+        this.message = ChatColor.translateAlternateColorCodes('&', messageKey.replace("%prefix%", prefix));
     }
 
     /**

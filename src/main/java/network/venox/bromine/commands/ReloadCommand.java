@@ -1,7 +1,6 @@
 package network.venox.bromine.commands;
 
 import network.venox.bromine.Main;
-import network.venox.bromine.managers.ConfigManager;
 import network.venox.bromine.managers.MessageManager;
 
 import org.bukkit.command.Command;
@@ -19,8 +18,8 @@ public class ReloadCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (!Main.hasPermission(sender, "reload")) return true;
 
-        new ConfigManager().loadFiles();
-        new MessageManager("reload").send(sender);
+        Main.loadFiles();
+        new MessageManager("plugin.reload").send(sender);
         return true;
     }
 }

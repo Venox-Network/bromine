@@ -3,10 +3,12 @@ package network.venox.bromine;
 import network.venox.bromine.commands.*;
 import network.venox.bromine.commands.tab.*;
 import network.venox.bromine.listeners.*;
-import network.venox.bromine.managers.ConfigManager;
 
+import network.venox.bromine.managers.MessageManager;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -14,6 +16,8 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 
 
@@ -29,7 +33,7 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
-        new ConfigManager().loadFiles();
+        loadFiles();
 
         // Register listeners
         Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
@@ -38,6 +42,28 @@ public class Main extends JavaPlugin {
         registerCommand("chattitle", new ChatTitleCommand(), null);
         registerCommand("brreload", new ReloadCommand(), new EmptyTab());
         registerCommand("reset", new ResetCommand(), null);
+    }
+
+    /**
+     * Creates/loads plugin files
+     */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void loadFiles() {
+        final File folder = plugin.getDataFolder();
+
+        // Create
+        if (!folder.exists()) folder.mkdir();
+        createFile("config");
+        createFile("messages");
+
+        // Load
+        Main.config = YamlConfiguration.loadConfiguration(new File(folder, "config.yml"));
+        Main.messages = YamlConfiguration.loadConfiguration(new File(folder, "messages.yml"));
+    }
+
+    public static void createFile(String name) {
+        final String fullName = name + ".yml";
+        if (!new File(plugin.getDataFolder(), fullName).exists()) plugin.saveResource(fullName, false);
     }
 
     /**
@@ -70,7 +96,28 @@ public class Main extends JavaPlugin {
     public static boolean hasPermission(CommandSender sender, String permission) {
         if (sender.hasPermission("bromine." + permission)) return true;
 
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(Main.config.getString("no-permission"))));
+        new MessageManager("plugin.no-permission")
+                .replace("%permission%", permission)
+                .send(sender);
         return false;
+    }
+
+    /**
+     * Unloads and deletes a world
+     *
+     * @param   world   The world to unload and delete
+     */
+    public static void deleteWorld(World world) {
+        if (world == null) return;
+
+        // Unload
+        Bukkit.unloadWorld(world, false);
+
+        // Delete
+        try {
+            FileUtils.deleteDirectory(world.getWorldFolder());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

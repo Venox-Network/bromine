@@ -26,7 +26,7 @@ public class ChatTitleCommand implements CommandExecutor {
 
         if (args.length == 1) {
             if (ctm.getPlayer(args[0]) == null) {
-                new MessageManager("invalid-player")
+                new MessageManager("plugin.invalid-player")
                         .replace("%player%", args[0])
                         .send(sender);
                 return true;

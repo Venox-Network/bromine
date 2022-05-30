@@ -1,5 +1,5 @@
-# Put player names here that should be allowed to use /ban-ip
-# To not allow anyone to use /ban-ip use this:
-# allowed-players: []
-ban-ip_allowed-players:
-  - srnyx
+# Everything related to the /ban-ip module
+ban-ip:
+  # Put player names here that should be allowed to use /ban-ip
+  allowed-players:
+    - srnyx

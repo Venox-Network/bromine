@@ -9,14 +9,14 @@ public class ChatTitleManager {
     public void toggle(Player player) {
         if (player.getScoreboardTags().contains("chattitle")) {
             player.removeScoreboardTag("chattitle");
-            new MessageManager("chat-title")
+            new MessageManager("chat-title.toggle")
                     .replace("%status%", "disabled")
                     .send(player);
             return;
         }
 
         player.addScoreboardTag("chattitle");
-        new MessageManager("chat-title")
+        new MessageManager("chat-title.toggle")
                 .replace("%status%", "enabled")
                 .send(player);
     }

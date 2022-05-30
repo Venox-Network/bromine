@@ -2,7 +2,6 @@ package network.venox.bromine.commands;
 
 import network.venox.bromine.Main;
 import network.venox.bromine.managers.MessageManager;
-import network.venox.bromine.managers.ResetManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -23,16 +22,14 @@ public class ResetCommand implements TabExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (!Main.hasPermission(sender, "reset")) return true;
 
-        // Kick players
-        for (final Player player : Bukkit.getOnlinePlayers()) player.kickPlayer(new MessageManager("reset.kick").string());
-
-        final ResetManager rm = new ResetManager();
-
         if (args.length == 0) {
+            // Kick players
+            for (final Player player : Bukkit.getOnlinePlayers()) player.kickPlayer(new MessageManager("reset.kick").string());
+
             // Unload/delete worlds
-            rm.delete(Bukkit.getWorld("world"));
-            rm.delete(Bukkit.getWorld("world_nether"));
-            rm.delete(Bukkit.getWorld("world_the_end"));
+            Main.deleteWorld(Bukkit.getWorld("world"));
+            Main.deleteWorld(Bukkit.getWorld("world_nether"));
+            Main.deleteWorld(Bukkit.getWorld("world_the_end"));
 
             // Restart server
             Bukkit.spigot().restart();
@@ -42,15 +39,20 @@ public class ResetCommand implements TabExecutor {
         if (args.length == 1) {
             final World world = Bukkit.getWorld(args[0]);
             if (world == null) {
-                new MessageManager("reset.error").log("warning");
+                new MessageManager("reset.error")
+                        .replace("%world%", args[0])
+                        .send(sender);
                 return true;
             }
+
+            // Kick players
+            for (final Player player : Bukkit.getOnlinePlayers()) player.kickPlayer(new MessageManager("reset.kick").string());
 
             // Store the world's environment for later
             final World.Environment env = world.getEnvironment();
 
             // Unload/delete world
-            rm.delete(world);
+            Main.deleteWorld(world);
 
             // Create new world
             WorldCreator creator = new WorldCreator(args[0]);
@@ -58,7 +60,9 @@ public class ResetCommand implements TabExecutor {
             creator.createWorld();
 
             // Send success message
-            new MessageManager("reset.success").log("info");
+            new MessageManager("reset.success")
+                    .replace("%world%", args[0])
+                    .log("info");
             return true;
         }
 
