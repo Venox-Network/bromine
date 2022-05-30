@@ -3,11 +3,11 @@ package network.venox.bromine;
 import network.venox.bromine.commands.*;
 import network.venox.bromine.commands.tab.*;
 import network.venox.bromine.listeners.*;
-
 import network.venox.bromine.managers.MessageManager;
+
 import org.apache.commons.io.FileUtils;
+
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,7 +18,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 
 public class Main extends JavaPlugin {
