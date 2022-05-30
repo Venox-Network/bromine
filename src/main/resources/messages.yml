@@ -1,0 +1,18 @@
+# Sent when they reload the plugin with sufficient permissions
+reload: "&2&lSUCCESS! &aPlugin files reloaded"
+
+
+# Sent when they run /ban-ip and are denied access
+ban-ip: "&4&lERROR! &cYou can't use this command"
+
+
+# Everything related to /reset
+reset:
+  # Sent when the world(s) are successfully reset
+  message: "&2&lSUCCESS! &aThe world(s) has been reset"
+
+  # The kick reason for the players online
+  kick: "&cResetting the world(s)"
+
+  # Message sent when the world specified doesn't exist
+  error: "&4&lERROR! &cThe world you specified doesn't exist"

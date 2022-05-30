@@ -1,17 +1,29 @@
-name: ban-ip-Disabler
+name: Bromine
 author: srnyx
-description: Disables the ban-ip command
+description: General essential stuff for Venox Network
 
-main: network.venox.ban_ip_disabler.Main
+main: network.venox.bromine.Main
 version: ${version}
-api-version: 1.13
+api-version: 1.18
 
 commands:
-  bipreload:
+  chattitle:
+    description: "Sends a player's chat as sub-title"
+    usage: "Usage: /<command> [player]"
+    permission: bromine.chattitle
+  brreload:
     description: "Reloads the plugin files"
     usage: "Usage: /<command>"
-    permission: ban-ip.reload
+    permission: bromine.reload
+  reset:
+    description: "Resets the world(s)"
+    usage: "Usage: /<command>"
+    permission: bromine.reset
 
 permissions:
-  ban-ip.reload:
-    description: "Gives access to /bipreload"
+  bromine.chattitle:
+    description: "Gives access to /chattitle"
+  bromine.reload:
+    description: "Gives access to /brreload"
+  bromine.reset:
+    description: "Gives access to /reset"

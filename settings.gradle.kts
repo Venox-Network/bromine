@@ -1,1 +1,1 @@
-rootProject.name = "ban-ip-disabler"
+rootProject.name = "Bromine"

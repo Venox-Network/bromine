@@ -1,15 +1,16 @@
-description = "ban-ip-disabler"
-version = "1.1.0"
+description = "Bromine"
+version = "2.0.0"
 group = "network.venox"
 
 repositories {
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    maven("https://oss.sonatype.org/content/repositories/snapshots/")
     mavenCentral()
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT")
+    compileOnly("commons-io:commons-io:2.11.0")
+    implementation("org.jetbrains:annotations:23.0.0")
 }
 
 plugins {
@@ -19,8 +20,6 @@ plugins {
 tasks {
     compileJava {
         options.encoding = "UTF-8"
-        sourceCompatibility = "1.8"
-        targetCompatibility = "1.8"
     }
 
     processResources {

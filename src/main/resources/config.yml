@@ -1,13 +1,5 @@
 # Put player names here that should be allowed to use /ban-ip
 # To not allow anyone to use /ban-ip use this:
 # allowed-players: []
-allowed-players:
+ban-ip_allowed-players:
   - srnyx
-
-# Messages sent to the player on certain actions
-messages:
-  # Sent when they run /ban-ip and are denied access
-  ban-ip: "&4&lERROR! &cYou can't use this command"
-
-  # Sent when they run /bipreload with sufficient permissions
-  reload: "&a&lSUCCESS! &aPlugin files reloaded"
