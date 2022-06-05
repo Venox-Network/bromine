@@ -1,11 +1,11 @@
 package network.venox.bromine.commands;
 
 import network.venox.bromine.Main;
+import network.venox.bromine.managers.FileManager;
 import network.venox.bromine.managers.MessageManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -26,10 +26,11 @@ public class ResetCommand implements TabExecutor {
             // Kick players
             for (final Player player : Bukkit.getOnlinePlayers()) player.kickPlayer(new MessageManager("reset.kick").string());
 
-            // Unload/delete worlds
-            Main.deleteWorld(Bukkit.getWorld("world"));
-            Main.deleteWorld(Bukkit.getWorld("world_nether"));
-            Main.deleteWorld(Bukkit.getWorld("world_the_end"));
+            // Delete worlds
+            Main.data.set("reset", true);
+            new FileManager().save("data", Main.data);
+            Main.worldManager.deleteWorld("world_nether");
+            Main.worldManager.deleteWorld("world_the_end");
 
             // Restart server
             Bukkit.spigot().restart();
@@ -46,23 +47,39 @@ public class ResetCommand implements TabExecutor {
             }
 
             // Kick players
-            for (final Player player : Bukkit.getOnlinePlayers()) player.kickPlayer(new MessageManager("reset.kick").string());
+            for (final Player player : Bukkit.getOnlinePlayers()) {
+                if (player.getWorld().equals(world)) player.kickPlayer(new MessageManager("reset.kick").string());
+            }
 
-            // Store the world's environment for later
-            final World.Environment env = world.getEnvironment();
+            if (world.getName().equals("world")) {
+                // Set reset stuff
+                Main.data.set("reset", true);
+                new FileManager().save("data", Main.data);
 
-            // Unload/delete world
-            Main.deleteWorld(world);
+                // Restart server
+                Bukkit.spigot().restart();
+
+                return true;
+            }
+
+            // Delete world
+            Main.worldManager.deleteWorld(world.getName());
 
             // Create new world
-            WorldCreator creator = new WorldCreator(args[0]);
-            creator.environment(env);
-            creator.createWorld();
+            //noinspection deprecation
+            Main.worldManager.addWorld(
+                    args[0],
+                    world.getEnvironment(),
+                    String.valueOf(world.getSeed()),
+                    world.getWorldType(),
+                    world.canGenerateStructures(),
+                    null
+            );
 
             // Send success message
             new MessageManager("reset.success")
                     .replace("%world%", args[0])
-                    .log("info");
+                    .send(sender);
             return true;
         }
 

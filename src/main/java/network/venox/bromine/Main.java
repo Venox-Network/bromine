@@ -1,14 +1,17 @@
 package network.venox.bromine;
 
+import com.onarandombox.MultiverseCore.MultiverseCore;
+import com.onarandombox.MultiverseCore.api.MVWorldManager;
+
 import network.venox.bromine.commands.*;
 import network.venox.bromine.commands.tab.*;
 import network.venox.bromine.listeners.*;
+import network.venox.bromine.managers.FileManager;
 import network.venox.bromine.managers.MessageManager;
 
 import org.apache.commons.io.FileUtils;
-
 import org.bukkit.Bukkit;
-import org.bukkit.World;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -22,17 +25,21 @@ import java.io.IOException;
 
 public class Main extends JavaPlugin {
     public static Main plugin;
+    public static MVWorldManager worldManager;
     public static YamlConfiguration config;
     public static YamlConfiguration messages;
+    public static YamlConfiguration data;
 
     /**
      * Everything done on plugin start
      */
     @Override
     public void onEnable() {
+        // Main.plugin
         plugin = this;
 
-        loadFiles();
+        // Load files
+        new FileManager().loadFiles();
 
         // Register listeners
         Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
@@ -40,29 +47,28 @@ public class Main extends JavaPlugin {
         // Register commands
         registerCommand("chattitle", new ChatTitleCommand(), null);
         registerCommand("brreload", new ReloadCommand(), new EmptyTab());
-        registerCommand("reset", new ResetCommand(), null);
-    }
 
-    /**
-     * Creates/loads plugin files
-     */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void loadFiles() {
-        final File folder = plugin.getDataFolder();
+        // Plugin specifics
+        final MultiverseCore multiverse = (MultiverseCore) Bukkit.getPluginManager().getPlugin("Multiverse-Core");
+        if (multiverse != null) {
+            worldManager = multiverse.getMVWorldManager();
+            registerCommand("reset", new ResetCommand(), null);
+        }
 
-        // Create
-        if (!folder.exists()) folder.mkdir();
-        createFile("config");
-        createFile("messages");
+        if (data.getBoolean("reset")) {
+            getLogger().info(ChatColor.GREEN + "Please disregard any world warnings you may get!");
 
-        // Load
-        Main.config = YamlConfiguration.loadConfiguration(new File(folder, "config.yml"));
-        Main.messages = YamlConfiguration.loadConfiguration(new File(folder, "messages.yml"));
-    }
+            // Delete world
+            try {
+                FileUtils.deleteDirectory(new File("world"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-    public static void createFile(String name) {
-        final String fullName = name + ".yml";
-        if (!new File(plugin.getDataFolder(), fullName).exists()) plugin.saveResource(fullName, false);
+            // Set reset and reset2
+            data.set("reset", false);
+            new FileManager().save("data", data);
+        }
     }
 
     /**
@@ -99,24 +105,5 @@ public class Main extends JavaPlugin {
                 .replace("%permission%", permission)
                 .send(sender);
         return false;
-    }
-
-    /**
-     * Unloads and deletes a world
-     *
-     * @param   world   The world to unload and delete
-     */
-    public static void deleteWorld(World world) {
-        if (world == null) return;
-
-        // Unload
-        Bukkit.unloadWorld(world, false);
-
-        // Delete
-        try {
-            FileUtils.deleteDirectory(world.getWorldFolder());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
