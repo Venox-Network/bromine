@@ -1,5 +1,6 @@
 package network.venox.bromine.managers;
 
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ public class ChatTitleManager {
             player.removeScoreboardTag("chattitle");
             new MessageManager("chat-title.toggle")
                     .replace("%status%", "disabled")
+                    .replace("%player%", player.getName())
                     .send(player);
             return;
         }
@@ -18,15 +20,21 @@ public class ChatTitleManager {
         player.addScoreboardTag("chattitle");
         new MessageManager("chat-title.toggle")
                 .replace("%status%", "enabled")
+                .replace("%player%", player.getName())
                 .send(player);
     }
 
-    public Player getPlayer(String name) {
-        for (OfflinePlayer offline : Bukkit.getOfflinePlayers()) {
-            String opName = offline.getName();
-            if (opName == null || !opName.equalsIgnoreCase(name)) return null;
+    public void send(Player player, String message) {
+        for (final Player online : Bukkit.getServer().getOnlinePlayers()) {
+            final String messageColor = ChatColor.translateAlternateColorCodes('&', message);
+            online.sendTitle(ChatColor.DARK_RED + player.getName() + ":", ChatColor.RED + messageColor, 0, 60, 10);
+        }
+    }
 
-            return offline.getPlayer();
+    public Player getPlayer(String name) {
+        for (final OfflinePlayer offline : Bukkit.getOfflinePlayers()) {
+            final String opName = offline.getName();
+            return opName != null && opName.equalsIgnoreCase(name) ? offline.getPlayer() : null;
         }
         return null;
     }

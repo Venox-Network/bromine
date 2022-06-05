@@ -37,4 +37,4 @@ reset:
 # Everything related to the /chattitle module
 chat-title:
   # Sent when a player toggles Chat-Title
-  toggle: "%prefix%&2&lSUCCESS! &aChat-Title has been &2%status%"
+  toggle: "%prefix%&2&lSUCCESS! &aChat-Title has been &2%status% &afor &2%player%"

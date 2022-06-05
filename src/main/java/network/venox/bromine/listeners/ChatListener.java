@@ -1,11 +1,9 @@
 package network.venox.bromine.listeners;
 
-import net.md_5.bungee.api.ChatColor;
-
 import network.venox.bromine.Main;
+import network.venox.bromine.managers.ChatTitleManager;
 import network.venox.bromine.managers.MessageManager;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,11 +20,7 @@ public class ChatListener implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         final Player player = event.getPlayer();
-
-        if (player.getScoreboardTags().contains("chattitle")) for (Player online : Bukkit.getServer().getOnlinePlayers()) {
-            final String message = ChatColor.translateAlternateColorCodes('&', event.getMessage());
-            online.sendTitle(ChatColor.DARK_RED + player.getName() + ":", ChatColor.RED + message, 10, 60, 10);
-        }
+        if (player.getScoreboardTags().contains("chattitle")) new ChatTitleManager().send(player, event.getMessage());
     }
 
     /**
