@@ -65,7 +65,7 @@ public class Main extends JavaPlugin {
                 e.printStackTrace();
             }
 
-            // Set reset and reset2
+            // Set reset
             data.set("reset", false);
             new FileManager().save("data", data);
         }
