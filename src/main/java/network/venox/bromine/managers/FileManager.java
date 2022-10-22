@@ -4,6 +4,8 @@ import network.venox.bromine.Main;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -33,7 +35,7 @@ public class FileManager {
         if (!new File(folder, fullName).exists()) Main.plugin.saveResource(fullName, false);
     }
 
-    public void save(String name, YamlConfiguration config) {
+    public void save(String name, @NotNull YamlConfiguration config) {
         try {
             config.save(new File(folder, name + ".yml"));
         } catch (IOException e) {

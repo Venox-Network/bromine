@@ -15,10 +15,8 @@ public class ReloadCommand implements CommandExecutor {
     /**
      * /brreload
      */
-    @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (!Main.hasPermission(sender, "reload")) return true;
-
         new FileManager().loadFiles();
         new MessageManager("plugin.reload").send(sender);
         return true;

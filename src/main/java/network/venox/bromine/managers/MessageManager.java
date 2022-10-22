@@ -5,6 +5,8 @@ import network.venox.bromine.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import org.jetbrains.annotations.NotNull;
+
 
 public class MessageManager {
     private String message;
@@ -49,47 +51,8 @@ public class MessageManager {
      *
      * @param   sender  The person/thing that should be sent the message
      */
-    public void send(CommandSender sender) {
+    public void send(@NotNull CommandSender sender) {
         sender.sendMessage(message);
-    }
-
-    /**
-     * Logs the message to the console
-     *
-     * @param   level   The level of logger  to use
-     */
-    public void log(String level) {
-        if (level.equals("info")) {
-            Main.plugin.getLogger().info(message);
-            return;
-        }
-
-        if (level.equals("warning")) {
-            Main.plugin.getLogger().warning(message);
-            return;
-        }
-
-        if (level.equals("severe")) {
-            Main.plugin.getLogger().severe(message);
-            return;
-        }
-
-        if (level.equals("fine")) {
-            Main.plugin.getLogger().fine(message);
-            return;
-        }
-
-        if (level.equals("finer")) {
-            Main.plugin.getLogger().finer(message);
-            return;
-        }
-
-        if (level.equals("finest")) {
-            Main.plugin.getLogger().finest(message);
-            return;
-        }
-
-        Main.plugin.getLogger().warning("(INVALID LOG LEVEL) " + message);
     }
 
     /**

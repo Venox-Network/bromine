@@ -1,13 +1,15 @@
 package network.venox.bromine.managers;
 
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import org.jetbrains.annotations.NotNull;
+
 
 public class ChatTitleManager {
-    public void toggle(Player player) {
+    public void toggle(@NotNull Player player) {
         if (player.getScoreboardTags().contains("chattitle")) {
             player.removeScoreboardTag("chattitle");
             new MessageManager("chat-title.toggle")

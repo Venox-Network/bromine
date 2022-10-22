@@ -16,7 +16,6 @@ import java.util.List;
 
 
 public class ChatTitleCommand implements TabExecutor {
-    @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (!Main.hasPermission(sender, "chattitle")) return true;
         final Player player = (Player) sender;
@@ -44,14 +43,12 @@ public class ChatTitleCommand implements TabExecutor {
         return true;
     }
 
-    @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        final List<String> suggestions = new ArrayList<>();
         final List<String> results = new ArrayList<>();
-
-        if (args.length == 1) for (final Player player : Bukkit.getOnlinePlayers()) suggestions.add(player.getName());
-
-        for (final String suggestion : suggestions) if (suggestion.toLowerCase().startsWith(args[args.length - 1].toLowerCase())) results.add(suggestion);
+        for (final Player player : Bukkit.getOnlinePlayers()) {
+            final String name = player.getName();
+            if (name.toLowerCase().startsWith(args[args.length - 1].toLowerCase())) results.add(name);
+        }
         return results;
     }
 }
