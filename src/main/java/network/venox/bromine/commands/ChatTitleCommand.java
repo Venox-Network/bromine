@@ -1,54 +1,78 @@
 package network.venox.bromine.commands;
 
-import network.venox.bromine.Main;
-import network.venox.bromine.managers.ChatTitleManager;
+import network.venox.bromine.Bromine;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import xyz.srnyx.annoyingapi.command.AnnoyingCommand;
+import xyz.srnyx.annoyingapi.command.AnnoyingSender;
+import xyz.srnyx.annoyingapi.data.EntityData;
+import xyz.srnyx.annoyingapi.message.AnnoyingMessage;
+import xyz.srnyx.annoyingapi.message.DefaultReplaceType;
+import xyz.srnyx.annoyingapi.utility.BukkitUtility;
+
+import java.util.Set;
 
 
-public class ChatTitleCommand implements TabExecutor {
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
-        if (!Main.hasPermission(sender, "chattitle")) return true;
-        final Player player = (Player) sender;
-        final ChatTitleManager ctm = new ChatTitleManager();
+public class ChatTitleCommand implements AnnoyingCommand {
+    @NotNull private final Bromine plugin;
 
-        // chattitle
+    public ChatTitleCommand(@NotNull Bromine plugin) {
+        this.plugin = plugin;
+    }
+
+    @Override @NotNull
+    public Bromine getAnnoyingPlugin() {
+        return plugin;
+    }
+
+    @Override @NotNull
+    public String getPermission() {
+        return "bromine.chattitle";
+    }
+
+    @Override
+    public void onCommand(@NotNull AnnoyingSender sender) {
+        final String[] args = sender.args;
+
+        // No arguments
         if (args.length == 0) {
-            ctm.toggle(player);
-            return true;
+            if (sender.checkPlayer()) toggle(sender.getPlayer());
+            return;
         }
 
         // chattitle <player>
-        final Player target = ctm.getPlayer(args[0]);
-        if (args.length == 1 && target != null) {
-            ctm.toggle(target);
-            return true;
+        if (args.length == 1) {
+            final Player target = Bukkit.getPlayer(args[0]);
+            if (target != null) {
+                toggle(target);
+                return;
+            }
         }
 
         // chattitle <message>
-        final StringBuilder sb = new StringBuilder();
-        for (final String arg : args) {
-            sb.append(arg).append(" ");
-        }
-        ctm.send(player, sb.toString());
-        return true;
+        if (sender.checkPlayer()) plugin.sendChatTitle(sender.getPlayer(), String.join(" ", args));
     }
 
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        final List<String> results = new ArrayList<>();
-        for (final Player player : Bukkit.getOnlinePlayers()) {
-            final String name = player.getName();
-            if (name.toLowerCase().startsWith(args[args.length - 1].toLowerCase())) results.add(name);
+    @Override @NotNull
+    public Set<String> onTabComplete(@NotNull AnnoyingSender sender) {
+        return BukkitUtility.getOnlinePlayerNames();
+    }
+
+    private void toggle(@NotNull Player player) {
+        final EntityData data = new EntityData(plugin, player);
+        final boolean wasEnabled = data.has("chattitle");
+        if (wasEnabled) {
+            data.remove("chattitle");
+        } else {
+            data.set("chattitle", true);
         }
-        return results;
+        new AnnoyingMessage(plugin, "chat-title.toggle")
+                .replace("%status%", !wasEnabled, DefaultReplaceType.BOOLEAN)
+                .replace("%player%", player.getName())
+                .send(player);
     }
 }

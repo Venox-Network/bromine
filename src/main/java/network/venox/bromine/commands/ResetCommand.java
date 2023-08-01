@@ -1,96 +1,100 @@
 package network.venox.bromine.commands;
 
-import network.venox.bromine.Main;
-import network.venox.bromine.managers.FileManager;
-import network.venox.bromine.managers.MessageManager;
+import network.venox.bromine.Bromine;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
-import org.bukkit.entity.Player;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import xyz.srnyx.annoyingapi.command.AnnoyingCommand;
+import xyz.srnyx.annoyingapi.command.AnnoyingSender;
+import xyz.srnyx.annoyingapi.message.AnnoyingMessage;
+import xyz.srnyx.annoyingapi.utility.BukkitUtility;
+
+import java.util.Set;
 
 
-public class ResetCommand implements TabExecutor {
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        if (!Main.hasPermission(sender, "reset")) return true;
+public class ResetCommand implements AnnoyingCommand {
+    @NotNull private final Bromine plugin;
 
+    public ResetCommand(@NotNull Bromine plugin) {
+        this.plugin = plugin;
+    }
+
+    @Override @NotNull
+    public Bromine getAnnoyingPlugin() {
+        return plugin;
+    }
+
+    @Override @NotNull
+    public String getPermission() {
+        return "bromine.reset";
+    }
+
+    @Override
+    public void onCommand(@NotNull AnnoyingSender sender) {
+        final String[] args = sender.args;
+
+        // No arguments
         if (args.length == 0) {
             // Kick players
-            for (final Player player : Bukkit.getOnlinePlayers()) player.kickPlayer(new MessageManager("reset.kick").string());
+            final String reason = new AnnoyingMessage(plugin, "reset.kick").toString(sender);
+            Bukkit.getOnlinePlayers().forEach(player -> player.kickPlayer(reason));
 
             // Delete worlds
-            Main.data.set("reset", true);
-            new FileManager().save("data", Main.data);
-            Main.worldManager.deleteWorld("world_nether");
-            Main.worldManager.deleteWorld("world_the_end");
+            plugin.data.setSave("reset", true);
+            plugin.worldManager.deleteWorld("world_nether");
+            plugin.worldManager.deleteWorld("world_the_end");
 
             // Restart server
             Bukkit.spigot().restart();
-            return true;
+            return;
         }
 
-        if (args.length == 1) {
-            final World world = Bukkit.getWorld(args[0]);
-            if (world == null) {
-                new MessageManager("reset.error")
-                        .replace("%world%", args[0])
-                        .send(sender);
-                return true;
-            }
-
-            // Kick players
-            for (final Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getWorld().equals(world)) player.kickPlayer(new MessageManager("reset.kick").string());
-            }
-
-            if (world.getName().equals("world")) {
-                // Set reset stuff
-                Main.data.set("reset", true);
-                new FileManager().save("data", Main.data);
-
-                // Restart server
-                Bukkit.spigot().restart();
-
-                return true;
-            }
-
-            // Delete world
-            Main.worldManager.deleteWorld(world.getName());
-
-            // Create new world
-            //noinspection deprecation
-            Main.worldManager.addWorld(
-                    args[0],
-                    world.getEnvironment(),
-                    String.valueOf(world.getSeed()),
-                    world.getWorldType(),
-                    world.canGenerateStructures(),
-                    null
-            );
-
-            // Send success message
-            new MessageManager("reset.success")
-                    .replace("%world%", args[0])
-                    .send(sender);
-            return true;
+        // <world>
+        final World world = Bukkit.getWorld(args[0]);
+        if (world == null) {
+            sender.invalidArgument(args[0]);
+            return;
         }
 
-        return true;
+        // Kick players
+        final String reason = new AnnoyingMessage(plugin, "reset.kick").toString(sender);
+        Bukkit.getOnlinePlayers().stream()
+                .filter(player -> player.getWorld().equals(world))
+                .forEach(player -> player.kickPlayer(reason));
+
+        if (world.getUID().equals(Bukkit.getWorlds().get(0).getUID())) {
+            // Set reset stuff
+            plugin.data.setSave("reset", true);
+
+            // Restart server
+            Bukkit.spigot().restart();
+            return;
+        }
+
+        // Delete world
+        plugin.worldManager.deleteWorld(world.getName());
+
+        // Create new world
+        //noinspection deprecation
+        plugin.worldManager.addWorld(
+                args[0],
+                world.getEnvironment(),
+                String.valueOf(world.getSeed()),
+                world.getWorldType(),
+                world.canGenerateStructures(),
+                null);
+
+        // Send success message
+        new AnnoyingMessage(plugin, "reset.success")
+                .replace("%world%", args[0])
+                .send(sender);
     }
 
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        final List<String> results = new ArrayList<>();
-        for (final World world : Bukkit.getWorlds()) {
-            final String name = world.getName();
-            if (name.toLowerCase().startsWith(args[args.length - 1].toLowerCase())) results.add(name);
-        }
-        return results;
+    @Override @NotNull
+    public Set<String> onTabComplete(@NotNull AnnoyingSender sender) {
+        return BukkitUtility.getWorldNames();
     }
 }

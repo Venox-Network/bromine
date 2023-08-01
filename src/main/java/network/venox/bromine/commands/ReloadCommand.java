@@ -1,24 +1,39 @@
 package network.venox.bromine.commands;
 
-import network.venox.bromine.Main;
-import network.venox.bromine.managers.FileManager;
-import network.venox.bromine.managers.MessageManager;
-
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import network.venox.bromine.Bromine;
 
 import org.jetbrains.annotations.NotNull;
 
+import xyz.srnyx.annoyingapi.command.AnnoyingCommand;
+import xyz.srnyx.annoyingapi.command.AnnoyingSender;
+import xyz.srnyx.annoyingapi.message.AnnoyingMessage;
 
-public class ReloadCommand implements CommandExecutor {
-    /**
-     * /brreload
-     */
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
-        if (!Main.hasPermission(sender, "reload")) return true;
-        new FileManager().loadFiles();
-        new MessageManager("plugin.reload").send(sender);
-        return true;
+
+public class ReloadCommand implements AnnoyingCommand {
+    @NotNull private final Bromine plugin;
+
+    public ReloadCommand(@NotNull Bromine plugin) {
+        this.plugin = plugin;
+    }
+
+    @Override @NotNull
+    public Bromine getAnnoyingPlugin() {
+        return plugin;
+    }
+
+    @Override @NotNull
+    public String getName() {
+        return "brreload";
+    }
+
+    @Override @NotNull
+    public String getPermission() {
+        return "bromine.reload";
+    }
+
+    @Override
+    public void onCommand(@NotNull AnnoyingSender sender) {
+        plugin.reloadPlugin();
+        new AnnoyingMessage(plugin, "reload").send(sender);
     }
 }

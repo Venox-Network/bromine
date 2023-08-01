@@ -1,32 +1,20 @@
-description = "Bromine"
-version = "2.1.0"
-group = "network.venox"
+import xyz.srnyx.gradlegalaxy.enums.Repository
+import xyz.srnyx.gradlegalaxy.enums.repository
+import xyz.srnyx.gradlegalaxy.utility.setupAnnoyingAPI
+import xyz.srnyx.gradlegalaxy.utility.spigotAPI
 
-repositories {
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    maven("https://repo.onarandombox.com/content/groups/public/")
-    mavenCentral()
-}
-
-dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT")
-    compileOnly("com.onarandombox.multiversecore:Multiverse-Core:4.3.1")
-    compileOnly("commons-io:commons-io:2.11.0")
-    compileOnly("org.jetbrains:annotations:23.0.0")
-}
 
 plugins {
     java
+    id("xyz.srnyx.gradle-galaxy") version "1.1.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-tasks {
-    compileJava {
-        options.encoding = "UTF-8"
-    }
-
-    processResources {
-        filesMatching("**/plugin.yml") {
-            expand(rootProject.project.properties)
-        }
-    }
+setupAnnoyingAPI("4.1.0", "network.venox", "2.1.0", "General essentials for Venox Network")
+spigotAPI("1.8.8")
+repository(Repository.PLACEHOLDER_API)
+repository("https://repo.onarandombox.com/content/groups/public/")
+dependencies {
+    compileOnly("me.clip", "placeholderapi", "2.11.3")
+    compileOnly("com.onarandombox.multiversecore", "Multiverse-Core", "4.3.1")
 }

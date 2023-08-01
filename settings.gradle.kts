@@ -1,1 +1,1 @@
-rootProject.name = "Bromine"
+rootProject.name = "BromineEssentials"

@@ -1,33 +1,38 @@
-name: Bromine
-author: srnyx
-description: General essentials for Venox Network
+name: ${name}
+description: ${description}
+authors:
+  - srnyx
+website: https://venox.network
 
-main: network.venox.bromine.Main
+main: ${group}.bromine.Bromine
 version: ${version}
-api-version: 1.18
+api-version: 1.13
 
-load: STARTUP
 softdepend:
+  - PlaceholderAPI
   - Multiverse-Core
 
 commands:
-  chattitle:
-    description: "Sends a player's chat as sub-title"
-    usage: "Usage: /<command> [player]"
-    permission: bromine.chattitle
   brreload:
     description: "Reloads the plugin files"
-    usage: "Usage: /<command>"
+    aliases:
+      - brominereload
     permission: bromine.reload
+  chattitle:
+    description: "Sends a player's chat as a title"
+    permission: bromine.chattitle
   reset:
     description: "Resets the world(s)"
-    usage: "Usage: /<command>"
+    aliases:
+      - worldreset
+      - resetworld
     permission: bromine.reset
 
 permissions:
-  bromine.chattitle:
-    description: "Gives access to /chattitle"
   bromine.reload:
     description: "Gives access to /brreload"
+  bromine.chattitle:
+    description: "Gives access to /chattitle"
   bromine.reset:
     description: "Gives access to /reset"
+    default: false
