@@ -9,7 +9,7 @@ import xyz.srnyx.annoyingapi.command.AnnoyingSender;
 import xyz.srnyx.annoyingapi.message.AnnoyingMessage;
 
 
-public class ReloadCommand implements AnnoyingCommand {
+public class ReloadCommand extends AnnoyingCommand {
     @NotNull private final Bromine plugin;
 
     public ReloadCommand(@NotNull Bromine plugin) {

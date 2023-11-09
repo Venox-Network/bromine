@@ -4,6 +4,7 @@ import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.MVWorldManager;
 
 import network.venox.bromine.commands.ResetCommand;
+import network.venox.bromine.listeners.ChatListener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -40,10 +41,9 @@ public class Bromine extends AnnoyingPlugin {
                         PluginPlatform.spigot("102058")))
                 .bStatsOptions(bStatsOptions -> bStatsOptions.id(18033))
                 .registrationOptions
+                .toRegister(this, ChatListener.class)
                 .automaticRegistration(automaticRegistration -> automaticRegistration
-                        .packages(
-                                "network.venox.bromine.commands",
-                                "network.venox.bromine.listeners")
+                        .packages("network.venox.bromine.commands")
                         .ignoredClasses(ResetCommand.class))
                 .papiExpansionToRegister(() -> new BrominePlaceholders(this));
         reload();

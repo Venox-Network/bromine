@@ -17,7 +17,7 @@ import xyz.srnyx.annoyingapi.utility.BukkitUtility;
 import java.util.Set;
 
 
-public class ChatTitleCommand implements AnnoyingCommand {
+public class ChatTitleCommand extends AnnoyingCommand {
     @NotNull private final Bromine plugin;
 
     public ChatTitleCommand(@NotNull Bromine plugin) {

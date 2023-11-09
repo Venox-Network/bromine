@@ -15,7 +15,7 @@ import xyz.srnyx.annoyingapi.data.EntityData;
 import xyz.srnyx.annoyingapi.message.AnnoyingMessage;
 
 
-public class ChatListener implements AnnoyingListener {
+public class ChatListener extends AnnoyingListener {
     @NotNull private final Bromine plugin;
 
     public ChatListener(@NotNull Bromine plugin) {

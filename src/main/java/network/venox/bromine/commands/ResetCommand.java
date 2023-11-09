@@ -15,7 +15,7 @@ import xyz.srnyx.annoyingapi.utility.BukkitUtility;
 import java.util.Set;
 
 
-public class ResetCommand implements AnnoyingCommand {
+public class ResetCommand extends AnnoyingCommand {
     @NotNull private final Bromine plugin;
 
     public ResetCommand(@NotNull Bromine plugin) {

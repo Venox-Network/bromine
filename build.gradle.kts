@@ -10,7 +10,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-setupAnnoyingAPI("4.1.0", "network.venox", "2.1.0", "General essentials for Venox Network")
+setupAnnoyingAPI("4.3.0", "network.venox", "2.1.0", "General essentials for Venox Network")
 spigotAPI("1.8.8")
 repository(Repository.PLACEHOLDER_API)
 repository("https://repo.onarandombox.com/content/groups/public/")
