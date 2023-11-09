@@ -12,6 +12,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import xyz.srnyx.annoyingapi.AnnoyingPlugin;
 import xyz.srnyx.annoyingapi.PluginPlatform;
@@ -29,9 +30,9 @@ import java.util.logging.Level;
 
 
 public class Bromine extends AnnoyingPlugin {
-    public Set<String> banIpAllowedPlayers;
-    public AnnoyingData data;
-    public MVWorldManager worldManager;
+    @Nullable public Set<String> banIpAllowedPlayers = getBanIpAllowedPlayers();
+    @NotNull public AnnoyingData data = new AnnoyingData(this, "data.yml", new AnnoyingFile.Options<>().canBeEmpty(false));
+    @Nullable public MVWorldManager worldManager;
 
     public Bromine() {
         options
@@ -46,12 +47,11 @@ public class Bromine extends AnnoyingPlugin {
                         .packages("network.venox.bromine.commands")
                         .ignoredClasses(ResetCommand.class))
                 .papiExpansionToRegister(() -> new BrominePlaceholders(this));
-        reload();
     }
 
     @Override
     public void reload() {
-        banIpAllowedPlayers = new HashSet<>(new AnnoyingResource(this, "config.yml").getStringList("ban-ip.allowed-players"));
+        banIpAllowedPlayers = getBanIpAllowedPlayers();
         data = new AnnoyingData(this, "data.yml", new AnnoyingFile.Options<>().canBeEmpty(false));
     }
 
@@ -85,6 +85,12 @@ public class Bromine extends AnnoyingPlugin {
                 Bukkit.getServer().shutdown();
             }
         }.runTaskLater(this, 1L);
+    }
+
+    @Nullable
+    private Set<String> getBanIpAllowedPlayers() {
+        final Set<String> allowedPlayers = new HashSet<>(new AnnoyingResource(this, "config.yml").getStringList("ban-ip.allowed-players"));
+        return allowedPlayers.isEmpty() ? null : allowedPlayers;
     }
 
     public void sendChatTitle(@NotNull Player player, @NotNull String message) {

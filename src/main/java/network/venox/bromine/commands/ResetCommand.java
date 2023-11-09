@@ -34,6 +34,10 @@ public class ResetCommand extends AnnoyingCommand {
 
     @Override
     public void onCommand(@NotNull AnnoyingSender sender) {
+        if (plugin.worldManager == null) {
+            sender.invalidArguments();
+            return;
+        }
         final String[] args = sender.args;
 
         // No arguments
@@ -78,7 +82,6 @@ public class ResetCommand extends AnnoyingCommand {
         plugin.worldManager.deleteWorld(world.getName());
 
         // Create new world
-        //noinspection deprecation
         plugin.worldManager.addWorld(
                 args[0],
                 world.getEnvironment(),

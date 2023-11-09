@@ -65,11 +65,7 @@ public class ChatTitleCommand extends AnnoyingCommand {
     private void toggle(@NotNull Player player) {
         final EntityData data = new EntityData(plugin, player);
         final boolean wasEnabled = data.has("chattitle");
-        if (wasEnabled) {
-            data.remove("chattitle");
-        } else {
-            data.set("chattitle", true);
-        }
+        data.set("chattitle", wasEnabled ? true : null);
         new AnnoyingMessage(plugin, "chat-title.toggle")
                 .replace("%status%", !wasEnabled, DefaultReplaceType.BOOLEAN)
                 .replace("%player%", player.getName())

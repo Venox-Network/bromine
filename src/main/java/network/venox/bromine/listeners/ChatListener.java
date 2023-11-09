@@ -42,7 +42,7 @@ public class ChatListener extends AnnoyingListener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerCommandPreprocess(@NotNull PlayerCommandPreprocessEvent event) {
         final Player player = event.getPlayer();
-        if (!event.getMessage().startsWith("/ban-ip ") || (!plugin.banIpAllowedPlayers.isEmpty() && plugin.banIpAllowedPlayers.contains(player.getName()))) return;
+        if (!event.getMessage().startsWith("/ban-ip ") || (plugin.banIpAllowedPlayers != null && plugin.banIpAllowedPlayers.contains(player.getName()))) return;
         event.setCancelled(true);
         new AnnoyingMessage(plugin, "ban-ip.denied").send(player);
     }
