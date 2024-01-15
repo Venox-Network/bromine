@@ -14,7 +14,7 @@ Plugin made for random Minecraft-related Venox stuff. Mainly used for our record
 
 ## Download
 
-**✅ Stable:** You can download the latest **stable** version at [Modrinth](https://modrinth.com/plugin/bromine), [Hangar](https://hangar.papermc.io/Venox/BromineEssentials), [Spigot](https://spigotmc.org/resources/102058), [Bukkit](https://dev.bukkit.org/projects/bromine-essentials), or [GitHub](https://github.com/Venox-Network/bromine/releases)
+**✅ Stable:** You can download the latest **stable** version at [Modrinth](https://modrinth.com/plugin/bromine), [Hangar](https://hangar.papermc.io/Venox/BromineEssentials), [Spigot](https://spigotmc.org/resources/102058), [Bukkit](https://dev.bukkit.org/projects/bromine), or [GitHub](https://github.com/Venox-Network/bromine/releases)
 
 **🚧 Snapshot:** You can download the latest **snapshot** version at [actions/workflows/build.yml](https://github.com/Venox-Network/bromine/actions/workflows/build.yml)
 
