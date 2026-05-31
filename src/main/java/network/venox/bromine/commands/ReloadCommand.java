@@ -1,9 +1,7 @@
 package network.venox.bromine.commands;
 
 import network.venox.bromine.Bromine;
-
 import org.jetbrains.annotations.NotNull;
-
 import xyz.srnyx.annoyingapi.command.AnnoyingCommand;
 import xyz.srnyx.annoyingapi.command.AnnoyingSender;
 import xyz.srnyx.annoyingapi.message.AnnoyingMessage;

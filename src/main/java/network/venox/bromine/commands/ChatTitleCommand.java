@@ -1,12 +1,9 @@
 package network.venox.bromine.commands;
 
 import network.venox.bromine.Bromine;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
 import org.jetbrains.annotations.NotNull;
-
 import xyz.srnyx.annoyingapi.command.AnnoyingCommand;
 import xyz.srnyx.annoyingapi.command.AnnoyingSender;
 import xyz.srnyx.annoyingapi.data.EntityData;
@@ -18,6 +15,8 @@ import java.util.Set;
 
 
 public class ChatTitleCommand extends AnnoyingCommand {
+    @NotNull public static final String KEY = "chattitle";
+
     @NotNull private final Bromine plugin;
 
     public ChatTitleCommand(@NotNull Bromine plugin) {
@@ -64,8 +63,8 @@ public class ChatTitleCommand extends AnnoyingCommand {
 
     private void toggle(@NotNull Player player) {
         final EntityData data = new EntityData(plugin, player);
-        final boolean wasEnabled = data.has("chattitle");
-        data.set("chattitle", wasEnabled ? true : null);
+        final boolean wasEnabled = data.has(KEY);
+        data.set(KEY, wasEnabled ? null : true);
         new AnnoyingMessage(plugin, "chat-title.toggle")
                 .replace("%status%", !wasEnabled, DefaultReplaceType.BOOLEAN)
                 .replace("%player%", player.getName())

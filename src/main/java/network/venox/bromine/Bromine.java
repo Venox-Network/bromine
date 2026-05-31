@@ -1,19 +1,16 @@
 package network.venox.bromine;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.onarandombox.MultiverseCore.api.MVWorldManager;
-
+import network.venox.bromine.commands.ChatTitleCommand;
 import network.venox.bromine.commands.ResetCommand;
 import network.venox.bromine.listeners.ChatListener;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
+import org.mvplugins.multiverse.core.MultiverseCoreApi;
+import org.mvplugins.multiverse.core.world.WorldManager;
 import xyz.srnyx.annoyingapi.AnnoyingPlugin;
 import xyz.srnyx.annoyingapi.PluginPlatform;
 import xyz.srnyx.annoyingapi.file.AnnoyingData;
@@ -32,7 +29,7 @@ import java.util.logging.Level;
 public class Bromine extends AnnoyingPlugin {
     @Nullable public Set<String> banIpAllowedPlayers = getBanIpAllowedPlayers();
     @NotNull public AnnoyingData data = new AnnoyingData(this, "data.yml", new AnnoyingFile.Options<>().canBeEmpty(false));
-    @Nullable public MVWorldManager worldManager;
+    @Nullable public WorldManager worldManager;
 
     public Bromine() {
         options
@@ -41,12 +38,19 @@ public class Bromine extends AnnoyingPlugin {
                         PluginPlatform.hangar(this, "Venox"),
                         PluginPlatform.spigot("102058")))
                 .bStatsOptions(bStatsOptions -> bStatsOptions.id(18033))
+                .dataOptions(dataOptions -> dataOptions
+                        .enabled(true)
+                        .entityDataColumns(ChatTitleCommand.KEY))
                 .registrationOptions
                 .toRegister(this, ChatListener.class)
                 .automaticRegistration(automaticRegistration -> automaticRegistration
-                        .packages("network.venox.bromine.commands")
-                        .ignoredClasses(ResetCommand.class))
+                        .packages("network.venox.bromine.commands"))
                 .papiExpansionToRegister(() -> new BrominePlaceholders(this));
+    }
+
+    @Override @NotNull
+    public String getLibsPackage() {
+        return "network{}venox{}bromineessentials{}libs{}";
     }
 
     @Override
@@ -63,7 +67,7 @@ public class Bromine extends AnnoyingPlugin {
         // Plugin specifics
         final Plugin multiverse = Bukkit.getPluginManager().getPlugin("Multiverse-Core");
         if (multiverse != null) {
-            worldManager = ((MultiverseCore) multiverse).getMVWorldManager();
+            worldManager = MultiverseCoreApi.get().getWorldManager();
             new ResetCommand(this).register();
         }
 
