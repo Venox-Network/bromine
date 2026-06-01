@@ -8,31 +8,13 @@ main: ${group}.bromine.Bromine
 version: ${version}
 api-version: 1.13
 
-softdepend:
-  - PlaceholderAPI
-  - Multiverse-Core
-
 commands:
   brreload:
     description: "Reloads the plugin files"
     aliases:
       - brominereload
     permission: bromine.reload
-  chattitle:
-    description: "Sends a player's chat as a title"
-    permission: bromine.chattitle
-  reset:
-    description: "Resets the world(s)"
-    aliases:
-      - worldreset
-      - resetworld
-    permission: bromine.reset
 
 permissions:
   bromine.reload:
     description: "Gives access to /brreload"
-  bromine.chattitle:
-    description: "Gives access to /chattitle"
-  bromine.reset:
-    description: "Gives access to /reset"
-    default: false

@@ -45,13 +45,6 @@ ban-ip:
   # Sent when a player tries to run /ban-ip
   denied: "&4&lERROR! &cYou can't use this command"
 
-# Everything related to the /reset module
-reset:
-  # Sent when the world(s) are successfully reset
-  success: "&2&lSUCCESS! &2%world% &ahas been reset" # %world%
-  # The kick reason for the players online
-  kick: "&cResetting the world(s)"
-
 # Everything related to the /chattitle module
 chat-title:
   # Sent when a player toggles Chat-Title

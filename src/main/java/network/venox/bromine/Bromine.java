@@ -1,51 +1,32 @@
 package network.venox.bromine;
 
-import network.venox.bromine.commands.ChatTitleCommand;
-import network.venox.bromine.commands.ResetCommand;
-import network.venox.bromine.listeners.ChatListener;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mvplugins.multiverse.core.MultiverseCoreApi;
-import org.mvplugins.multiverse.core.world.WorldManager;
 import xyz.srnyx.annoyingapi.AnnoyingPlugin;
 import xyz.srnyx.annoyingapi.PluginPlatform;
-import xyz.srnyx.annoyingapi.file.AnnoyingData;
-import xyz.srnyx.annoyingapi.file.AnnoyingFile;
 import xyz.srnyx.annoyingapi.file.AnnoyingResource;
-import xyz.srnyx.annoyingapi.message.AnnoyingMessage;
-import xyz.srnyx.annoyingapi.message.BroadcastType;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 
 
 public class Bromine extends AnnoyingPlugin {
-    @Nullable public Set<String> banIpAllowedPlayers = getBanIpAllowedPlayers();
-    @NotNull public AnnoyingData data = new AnnoyingData(this, "data.yml", new AnnoyingFile.Options<>().canBeEmpty(false));
-    @Nullable public WorldManager worldManager;
+    @Nullable public Set<String> banIpAllowedPlayers;
 
     public Bromine() {
         options
                 .pluginOptions(pluginOptions -> pluginOptions.updatePlatforms(
                         PluginPlatform.modrinth("bromine"),
-                        PluginPlatform.hangar(this, "Venox"),
+                        PluginPlatform.hangar("BromineEssentials", "Venox"),
                         PluginPlatform.spigot("102058")))
                 .bStatsOptions(bStatsOptions -> bStatsOptions.id(18033))
-                .dataOptions(dataOptions -> dataOptions
-                        .enabled(true)
-                        .entityDataColumns(ChatTitleCommand.KEY))
-                .registrationOptions
-                .toRegister(this, ChatListener.class)
-                .automaticRegistration(automaticRegistration -> automaticRegistration
-                        .packages("network.venox.bromine.commands"))
-                .papiExpansionToRegister(() -> new BrominePlaceholders(this));
+                .registrationOptions.automaticRegistration
+                .packages("network.venox.bromine.commands")
+                .packages("network.venox.bromine.listeners");
+
+        reload();
     }
 
     @Override @NotNull
@@ -55,52 +36,11 @@ public class Bromine extends AnnoyingPlugin {
 
     @Override
     public void reload() {
-        banIpAllowedPlayers = getBanIpAllowedPlayers();
-        data = new AnnoyingData(this, "data.yml", new AnnoyingFile.Options<>().canBeEmpty(false));
+        final List<String> allowedPlayers = new AnnoyingResource(this, "config.yml").getStringList("ban-ip.allowed-players");
+        banIpAllowedPlayers = allowedPlayers.isEmpty() ? null : new HashSet<>(allowedPlayers);
     }
 
-    /**
-     * Everything done on plugin start
-     */
-    @Override
-    public void enable() {
-        // Plugin specifics
-        final Plugin multiverse = Bukkit.getPluginManager().getPlugin("Multiverse-Core");
-        if (multiverse != null) {
-            worldManager = MultiverseCoreApi.get().getWorldManager();
-            new ResetCommand(this).register();
-        }
-
-        // World reset
-        if (data.getBoolean("reset")) new BukkitRunnable() {
-            public void run() {
-                log(Level.SEVERE, "Please disregard any world warnings you may get!");
-
-                // Delete world
-                try {
-                    Files.delete(Bukkit.getWorlds().get(0).getWorldFolder().toPath());
-                } catch (final IOException e) {
-                    e.printStackTrace();
-                }
-
-                // Set reset
-                data.setSave("reset", null);
-                // Restart server
-                Bukkit.getServer().shutdown();
-            }
-        }.runTaskLater(this, 1L);
-    }
-
-    @Nullable
-    private Set<String> getBanIpAllowedPlayers() {
-        final Set<String> allowedPlayers = new HashSet<>(new AnnoyingResource(this, "config.yml").getStringList("ban-ip.allowed-players"));
-        return allowedPlayers.isEmpty() ? null : allowedPlayers;
-    }
-
-    public void sendChatTitle(@NotNull Player player, @NotNull String message) {
-        new AnnoyingMessage(this, "chat-title.format")
-                .replace("%player%", player.getName())
-                .replace("%message%", message)
-                .broadcast(BroadcastType.FULL_TITLE, 0, 60, 10);
+    public boolean isBanIpAllowed(@NotNull Player player) {
+        return banIpAllowedPlayers != null && (banIpAllowedPlayers.contains(player.getUniqueId().toString()) || banIpAllowedPlayers.contains(player.getName()));
     }
 }

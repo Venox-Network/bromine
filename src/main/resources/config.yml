@@ -1,5 +1,6 @@
 # Everything related to the /ban-ip module
 ban-ip:
-  # Put player names here that should be allowed to use /ban-ip
+  # Put player UUIDs (safer) or names (less safe due to changing) here that should be allowed to use /ban-ip
   allowed-players:
+    - "e907083e-5db6-41fc-9e32-5c4d99a08712"
     - srnyx

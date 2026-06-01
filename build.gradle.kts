@@ -1,7 +1,5 @@
 import xyz.srnyx.gradlegalaxy.data.config.DependencyConfig
 import xyz.srnyx.gradlegalaxy.data.config.JavaSetupConfig
-import xyz.srnyx.gradlegalaxy.enums.Repository
-import xyz.srnyx.gradlegalaxy.enums.repository
 import xyz.srnyx.gradlegalaxy.utility.setupAnnoyingAPI
 import xyz.srnyx.gradlegalaxy.utility.spigotAPI
 
@@ -15,12 +13,6 @@ plugins {
 spigotAPI(config = DependencyConfig(version = "1.8.8"))
 setupAnnoyingAPI(javaSetupConfig = JavaSetupConfig(
     group = "network.venox",
-    version = "2.2.1",
+    version = "3.0.0",
     description = "General essentials for Venox Network"),
-    annoyingAPIConfig = DependencyConfig(version = "be87b43"))
-
-repository(Repository.PLACEHOLDER_API, Repository.MULTIVERSE)
-dependencies {
-    compileOnly("me.clip:placeholderapi:2.12.2")
-    compileOnly("org.mvplugins.multiverse.core:multiverse-core:5.6.2")
-}
+    annoyingAPIConfig = DependencyConfig(version = "db46b2b"))
